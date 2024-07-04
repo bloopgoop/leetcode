@@ -11,7 +11,6 @@ class Solution(object):
         :rtype: ListNode
         """
 
-        print(head)
         fast, slow = head, head
         for _ in range(n):
             fast = fast.next
