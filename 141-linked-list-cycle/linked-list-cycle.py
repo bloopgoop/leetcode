@@ -10,16 +10,15 @@ class Solution(object):
         :type head: ListNode
         :rtype: bool
         """
-        node_to_index = {}
-
-        counter = 0
-        while head:
-            if head in node_to_index:
-                return True
-            else:
-                node_to_index[head] = counter
-            
-            counter += 1
-            head = head.next
         
+        # two pointer solution O(n) time, O(1) space.
+        slow, fast = head, head
+
+        while fast and fast.next:
+            slow = slow.next
+            fast = fast.next.next
+
+            if slow == fast:
+                return True
+
         return False
