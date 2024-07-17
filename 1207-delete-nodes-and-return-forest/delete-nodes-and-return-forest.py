@@ -38,5 +38,4 @@ class Solution(object):
                     roots.append(root.right)
 
         dfs(root)
-        print(roots)
         return roots
