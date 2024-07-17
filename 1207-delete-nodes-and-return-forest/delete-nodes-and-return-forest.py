@@ -11,31 +11,31 @@ class Solution(object):
         :type to_delete: List[int]
         :rtype: List[TreeNode]
         """
-        roots = []
+        to_delete = set(to_delete) # O(1) lookups
+        forest = []
 
-        if root.val not in to_delete:
-            roots.append(root)
+        root = self._process_node(root, to_delete, forest)
 
-        def dfs(root):
-            if not root:
-                return
+        if root:
+            forest.append(root)
+        
+        return forest
 
-            left = root.left
-            if left and left.val in to_delete:
-                root.left = None
-            dfs(left)
+    def _process_node(self, node, to_delete, forest):
+        if not node:
+            return None
 
-            right = root.right
-            if right and right.val in to_delete:
-                root.right = None
-            dfs(right)
+        node.left = self._process_node(node.left, to_delete, forest)
+        node.right = self._process_node(node.right, to_delete, forest)
 
+        # Node evaluation: Check if the current node needs to be deleted
+        if node.val in to_delete:
+            # If the node has left or right children, add them to the forest
+            if node.left:
+                forest.append(node.left)
+            if node.right:
+                forest.append(node.right)
+            # Delete the current node by returning None to its parent
+            return None
 
-            if root.val in to_delete:
-                if root.left:
-                    roots.append(root.left)
-                if root.right:
-                    roots.append(root.right)
-
-        dfs(root)
-        return roots
+        return node
