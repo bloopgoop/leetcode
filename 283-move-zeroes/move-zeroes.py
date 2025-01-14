@@ -4,13 +4,10 @@ class Solution(object):
         :type nums: List[int]
         :rtype: None Do not return anything, modify nums in-place instead.
         """
-        i = 0
-        zero_counter = 0
-        while i < len(nums) - zero_counter:
-            if nums[i] == 0:
-                nums.pop(i)
-                nums.append(0)
-                zero_counter += 1
-            else:
-                i += 1
-        
+        slow = 0
+        for fast in range(len(nums)):
+            if nums[fast] != 0 and nums[slow] == 0:
+                nums[slow], nums[fast] = nums[fast], nums[slow]
+
+            if nums[slow] != 0:
+                slow += 1
