@@ -9,16 +9,19 @@ class Solution:
         root1_leaf = []
         root2_leaf = []
 
-        def dfs(root, arr):
+        def dfs(root, leaf: int):
             if not root.left and not root.right:
-                arr.append(root.val)
-            
-            if root.left:
-                dfs(root.left, arr)
-            if root.right:
-                dfs(root.right, arr)
+                if leaf == 1:
+                    root1_leaf.append(root.val)
+                else:
+                    root2_leaf.append(root.val)
 
-        dfs(root1, root1_leaf)
-        dfs(root2, root2_leaf)
+            if root.left:
+                dfs(root.left, leaf)
+            if root.right:
+                dfs(root.right, leaf)
+
+        dfs(root1, 1)
+        dfs(root2, 2)
 
         return root1_leaf == root2_leaf
