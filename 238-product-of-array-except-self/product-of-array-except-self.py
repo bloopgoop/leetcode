@@ -1,45 +1,21 @@
-class Solution(object):
-    def productExceptSelf(self, nums):
-        """
-        :type nums: List[int]
-        :rtype: List[int]
-        """
-        # go through array forwards and backwards
-        # store all computed multiplications in a hash
+class Solution:
+    def productExceptSelf(self, nums: List[int]) -> List[int]:
+        left_to_right_products = [nums[0] for _ in range(len(nums))]
+        right_to_left_products = [nums[-1] for _ in range(len(nums))]
 
-        # input:
-        # [1, 2, 3, 4]
-
-        # forwards:
-        # (0, 0): 1
-        # (0, 1): 1
-        # (0, 2): 2
-        # (0, 3): 6
-
-        # backwards:
-        # (4, 4): 1
-        # (3, 4): 4
-        # (2, 4): 12
-        # (1, 4): 24
-
-        # answer[i] = forwards[(0, i)] * backwards[(i + 1, len(nums))]
-
-        # store computed in a hash
-        products = {}
-
-        # forwards
-        products[(0, 0)] = 1
         for i in range(1, len(nums)):
-            products[(0, i)] = products[(0, i - 1)] * nums[i - 1]
+            left_to_right_products[i] = left_to_right_products[i - 1] * nums[i]
+        
+        for i in range(len(nums) - 2, -1, -1):
+            right_to_left_products[i] = right_to_left_products[i + 1] * nums[i]
 
-        # backwards
-        products[(len(nums), len(nums))] = 1
-        for i in range(len(nums) - 1, 0, -1):
-            products[(i, len(nums))] = products[(i + 1, len(nums))] * nums[i]
-
-        answer = []
+        res = [0 for _ in range(len(nums))]
         for i in range(len(nums)):
-            answer.append(products[(0, i)] * products[(i + 1, len(nums))])
+            if i == 0:
+                res[i] = right_to_left_products[i + 1]
+            elif i == len(nums) - 1:
+                res[i] = left_to_right_products[i - 1]
+            else:
+                res[i] = left_to_right_products[i - 1] * right_to_left_products[i + 1]
 
-        return answer
-
+        return res
